@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CarcarbeWebApp.Models;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarcarbeWebApp.Controllers
@@ -9,14 +11,25 @@ namespace CarcarbeWebApp.Controllers
     [Route("api/[controller]")]
     public class SampleDataController : Controller
     {
+        private readonly IBus _bus;
+        public SampleDataController(IBus bus)
+        {
+            _bus = bus;
+        }
+
         private static string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
         [HttpGet("[action]")]
-        public IEnumerable<WeatherForecast> WeatherForecasts(int startDateIndex)
+        public async Task<IEnumerable<WeatherForecast>> WeatherForecasts(int startDateIndex)
         {
+            await _bus.Publish<Message>(
+      new
+      {
+          Value = "123"
+      });
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

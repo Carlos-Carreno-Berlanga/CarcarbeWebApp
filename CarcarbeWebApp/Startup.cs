@@ -3,24 +3,27 @@ using CarcarbeWebApp.Logging;
 using CarcarbeWebApp.Messages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Rebus.Bus;
+using Rebus.Activation;
+using Rebus.Config;
 using Rebus.Routing.TypeBased;
 using Rebus.ServiceProvider;
-using Rebus.Transport.InMem;
-using System.Linq;
+using Rebus.RabbitMq;
+using System;
 using System.Threading.Tasks;
+using Rebus.Transport.InMem;
 
 namespace CarcarbeWebApp
 {
     public class Startup
     {
         private readonly ILoggerFactory _loggerFactory;
+        //const Rebus.Logging.LogLevel MinimumLogLevel = Rebus.Logging.LogLevel.Warn; 
+        const string ConnectionString = "amqp://localhost";
         public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
@@ -35,12 +38,16 @@ namespace CarcarbeWebApp
         {
             // Register handlers 
             services.AutoRegisterHandlersFromAssemblyOf<Handler1>();
-
+           
             // Configure and register Rebus
+            //services.AddRebus(configure => configure
+            //        .Logging(l => l.Use(new MSLoggerFactoryAdapter(_loggerFactory)))
+            //        .Transport(t => t.UseRabbitMq("amqp://guest:guest@localhost:5672/", "messages-queue"))
+            //        .Start());
             services.AddRebus(configure => configure
-                    .Logging(l => l.Use(new MSLoggerFactoryAdapter(_loggerFactory)))
-                    .Transport(t => t.UseInMemoryTransport(new InMemNetwork(), "Messages"))
-                    .Routing(r => r.TypeBased().MapAssemblyOf<Message1>("Messages")));
+        .Logging(l => l.Use(new MSLoggerFactoryAdapter(_loggerFactory)))
+        .Transport(t => t.UseRabbitMq("amqp://guest:guest@localhost:5672/", "messages-queue"))
+        .Routing(r => r.TypeBased().MapAssemblyOf<Message1>("messages-queue")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -98,7 +105,9 @@ namespace CarcarbeWebApp
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-           
+
         }
+
+
     }
 }

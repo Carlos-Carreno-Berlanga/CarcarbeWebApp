@@ -46,7 +46,7 @@ namespace CarcarbeWebApp
             //        .Start());
             services.AddRebus(configure => configure
         .Logging(l => l.Use(new MSLoggerFactoryAdapter(_loggerFactory)))
-        .Transport(t => t.UseRabbitMq("amqp://guest:guest@localhost:5672/", "messages-queue"))
+        .Transport(t => t.UseRabbitMq("amqp://pklfurgc:4YJosxjltR4AntkkvVignFH-TKW16c9k@raven.rmq.cloudamqp.com/pklfurgc", "messages-queue"))
         .Routing(r => r.TypeBased().MapAssemblyOf<Message1>("messages-queue")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

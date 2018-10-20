@@ -16,6 +16,7 @@ using Rebus.RabbitMq;
 using System;
 using System.Threading.Tasks;
 using Rebus.Transport.InMem;
+using CarcarbeWebApp.HostedService;
 
 namespace CarcarbeWebApp
 {
@@ -62,6 +63,7 @@ namespace CarcarbeWebApp
             {
                 configuration.RootPath = "ClientApp/build";
             });
+            services.AddHostedService<TimedHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

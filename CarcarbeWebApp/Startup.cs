@@ -16,6 +16,7 @@ using Rebus.RabbitMq;
 using System;
 using System.Threading.Tasks;
 using Rebus.Transport.InMem;
+using CarcarbeWebApp.HostedService;
 
 namespace CarcarbeWebApp
 {
@@ -50,12 +51,19 @@ namespace CarcarbeWebApp
         .Routing(r => r.TypeBased().MapAssemblyOf<Message1>("messages-queue")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddDistributedRedisCache(option =>
+            {
+                option.Configuration = "redis-19221.c92.us-east-1-3.ec2.cloud.redislabs.com:19221,password=6MFI4IqLgNP9TyCcv6BjFKNQMXoHtIZc";
+                option.InstanceName = "carcarbe-redis-db";
+             
+            });
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
+            services.AddHostedService<TimedHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

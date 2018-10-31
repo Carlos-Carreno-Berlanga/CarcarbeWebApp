@@ -1,0 +1,5 @@
+heroku login
+heroku container:login
+docker tag imageId registry.heroku.com/carcarbe-web-app/web
+docker push  registry.heroku.com/carcarbe-web-app/web
+heroku container:release web --app=carcarbe-web-app

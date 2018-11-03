@@ -2,7 +2,7 @@
 using Rebus.Logging;
 using System;
 
-namespace CarcarbeWebApp.Logging
+namespace Carcarbe.Shared.Logging
 {
     public class MSLoggerFactoryAdapter : AbstractRebusLoggerFactory
     {

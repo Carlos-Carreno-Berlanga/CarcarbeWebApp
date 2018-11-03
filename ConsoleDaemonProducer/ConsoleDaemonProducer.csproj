@@ -24,7 +24,13 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.1" />
+    <PackageReference Include="Rebus" Version="5.0.1" />
+    <PackageReference Include="Rebus.RabbitMQ" Version="4.4.2" />
+    <PackageReference Include="Rebus.ServiceProvider" Version="4.0.1" />
     <PackageReference Include="SenseHatNet" Version="0.0.2" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0005" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Carcarbe.Shared\Carcarbe.Shared.csproj" />
   </ItemGroup>
 </Project>

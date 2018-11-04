@@ -1,4 +1,5 @@
-﻿using ConsoleDaemonProducer.Services.Interfaces;
+﻿using ConsoleDaemonProducer.Domain;
+using ConsoleDaemonProducer.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using Sense.RTIMU;
 using System;
@@ -22,23 +23,20 @@ namespace ConsoleDaemonProducer.Services.Implementation
                 using (var pressure = settings.CreatePressure())
                 using (var humidity = settings.CreateHumidity())
                 {
-
-                    var pressureReadResult = pressure.Read();
+                    
+                    RTPressureData pressureReadResult = pressure.Read();
                     Console.WriteLine($"Pressure valid: {pressureReadResult.PressureValid}");
                     Console.WriteLine($"Pressure: {pressureReadResult.Pressure}");
                     Console.WriteLine($"Temperature valid: {pressureReadResult.TemperatureValid}");
                     Console.WriteLine($"Temperature: {pressureReadResult.Temperatur}");
                     Console.WriteLine();
 
-                    var humidityReadResult = humidity.Read();
+                    RTHumidityData humidityReadResult = humidity.Read();
                     Console.WriteLine($"Humidity valid: {humidityReadResult.HumidityValid}");
                     Console.WriteLine($"Humidity: {humidityReadResult.Humidity}");
                     Console.WriteLine($"Temperature valid: {humidityReadResult.TemperatureValid}");
                     Console.WriteLine($"Temperature: {humidityReadResult.Temperatur}");
-
-
-
-
+                    Measurement measurement = new Measurement(pressureReadResult, humidityReadResult);
                 }
             }
             catch(Exception ex)

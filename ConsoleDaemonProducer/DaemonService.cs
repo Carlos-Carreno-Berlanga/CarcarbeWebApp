@@ -45,7 +45,7 @@ namespace ConsoleDaemonProducer
                     _logger.LogInformation($"{DateTime.Now}: Timed Background Service is running:");
 
                     await DoWorkAsync();
-                    await Task.Delay(10000);
+                    await Task.Delay(30000);
                 }
             }
 

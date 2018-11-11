@@ -48,7 +48,7 @@ namespace ConsoleDaemonProducer
         services.AddScoped<IMeasurementService, MeasurementService>();
         services.AddScoped<IMeasurementRepository, MeasurementRepository>();
         services.AddSingleton<IHostedService, DaemonService>();
-
+        
         services.AddRebus(configure => configure
     .Logging(l => l.Use(new MSLoggerFactoryAdapter(loggerFactory)))
     .Transport(t => t.UseRabbitMq("amqp://pklfurgc:4YJosxjltR4AntkkvVignFH-TKW16c9k@raven.rmq.cloudamqp.com/pklfurgc", "messages-queue"))

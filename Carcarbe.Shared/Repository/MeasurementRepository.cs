@@ -14,10 +14,13 @@ namespace Carcarbe.Shared.Repository
     public class MeasurementRepository : IMeasurementRepository
     {
         private string connectionString;
+        private readonly ILogger<MeasurementRepository> _logger;
         public MeasurementRepository(IConfiguration configuration, ILogger<MeasurementRepository> logger)
         {
+            _logger = logger;
             connectionString = Environment.GetEnvironmentVariable("DB_INFO", EnvironmentVariableTarget.Machine);
-            logger.LogInformation($"connectionString {connectionString}");
+            _logger.LogInformation($"logger connectionString {connectionString}");
+            Console.WriteLine($" console connectionString {connectionString}");
         }
 
         internal IDbConnection Connection
@@ -30,14 +33,15 @@ namespace Carcarbe.Shared.Repository
 
         public void Add(Measurement item)
         {
+            
             using (IDbConnection dbConnection = Connection)
             {
                 dbConnection.Open();
-                
+
                 dbConnection.Execute("INSERT INTO measurement (value, measurement_type, time_stamp_timezone ) VALUES(@Value,@MeasurementType::measurementtype,@TimeStamp)",
                     new
                     {
-                        item.Value,
+                        Value = Math.Round((double)item.Value, 2),
                         MeasurementType = item.MeasurementType.ToString(),
                         TimeStamp = DateTime.Now
                     });
@@ -47,19 +51,25 @@ namespace Carcarbe.Shared.Repository
 
         public async Task AddAsync(Measurement item)
         {
-            using (IDbConnection dbConnection = Connection)
+            try
             {
-                dbConnection.Open();
+                using (IDbConnection dbConnection = Connection)
+                {
+                    dbConnection.Open();
 
-                await dbConnection.ExecuteAsync("INSERT INTO measurement (value, measurement_type, time_stamp_timezone ) VALUES(@Value,@MeasurementType::measurementtype,@TimeStamp)",
-                    new
-                    {
-                        item.Value,
-                        MeasurementType = item.MeasurementType.ToString(),
-                        TimeStamp = DateTime.Now
-                    });
+                    await dbConnection.ExecuteAsync("INSERT INTO measurement (value, measurement_type, time_stamp_timezone ) VALUES(@Value,@MeasurementType::measurementtype,@TimeStamp)",
+                        new
+                        {
+                            item.Value,
+                            MeasurementType = item.MeasurementType.ToString(),
+                            TimeStamp = DateTime.Now
+                        });
+                }
             }
-
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
         }
 
         public IEnumerable<Measurement> FindAll()

@@ -1,6 +1,7 @@
 ﻿using Carcarbe.Shared.Domain.Entities;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,10 @@ namespace Carcarbe.Shared.Repository
     public class MeasurementRepository : IMeasurementRepository
     {
         private string connectionString;
-        public MeasurementRepository(IConfiguration configuration)
+        public MeasurementRepository(IConfiguration configuration, ILogger<MeasurementRepository> logger)
         {
             connectionString = Environment.GetEnvironmentVariable("DB_INFO", EnvironmentVariableTarget.Machine);
+            logger.LogInformation($"connectionString {connectionString}");
         }
 
         internal IDbConnection Connection

@@ -1,7 +1,4 @@
 ﻿using Sense.RTIMU;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Carcarbe.Shared.Domain
 {
@@ -16,7 +13,10 @@ namespace Carcarbe.Shared.Domain
             pressureTemperatureValueValid = rTPressureData.PressureValid;
 
             humidityValue = rTHumidityData.Humidity;
+            humidityValueValid = rTHumidityData.HumidityValid;
+
             humidityTemperatureValue = rTHumidityData.Temperatur;
+            humidityTemperatureValueValid = rTHumidityData.TemperatureValid;
         }
 
         public float pressureValue { get; set; }

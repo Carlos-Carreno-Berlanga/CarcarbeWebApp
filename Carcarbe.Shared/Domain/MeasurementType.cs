@@ -9,5 +9,7 @@ namespace Carcarbe.Shared.Domain
         temperature,
         humidity,
         pressure,
+        temperature_humidity,
+        temperature_pressure
     }
 }

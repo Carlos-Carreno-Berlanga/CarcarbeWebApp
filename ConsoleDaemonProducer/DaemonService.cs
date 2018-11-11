@@ -1,6 +1,4 @@
-﻿using Carcarbe.Shared.Domain;
-using Carcarbe.Shared.Domain.Entities;
-using Carcarbe.Shared.Messages;
+﻿using Carcarbe.Shared.Messages;
 using Carcarbe.Shared.Repository;
 using ConsoleDaemonProducer.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,7 +48,7 @@ namespace ConsoleDaemonProducer
                     _logger.LogInformation($"{DateTime.Now}: Timed Background Service is running:");
 
                     await DoWorkAsync();
-                    await Task.Delay(30000);
+                    await Task.Delay(_config.Value.TickInterval);
                 }
             }
 
@@ -61,39 +59,7 @@ namespace ConsoleDaemonProducer
             var senseHatmeasurement = _measurementService.Measure();
 
             await _measurementService.SaveAsync(senseHatmeasurement);
-            //_measurementRepository.Add(new Measurement(22.12f, MeasurementType.temperature));
-
-            //using (var settings = RTIMUSettings.CreateDefault())
-            //using (var imu = settings.CreateIMU())
-            //using (var pressure = settings.CreatePressure())
-            //using (var humidity = settings.CreateHumidity())
-            //{
-
-            //    var imuData = imu.GetData();
-            //    Console.WriteLine($"Timestamp: {imuData.Timestamp:O}");
-            //    Console.WriteLine($"FusionPose: Valid: {imuData.FusionPoseValid}, Value: {imuData.FusionPose}");
-            //    Console.WriteLine($"FusionQPose: Valid: {imuData.FusionQPoseValid}, Value: {imuData.FusionQPose}");
-            //    Console.WriteLine($"Gyro: Valid: {imuData.GyroValid}, Value: {imuData.Gyro}");
-            //    Console.WriteLine($"Accel: Valid: {imuData.AccelValid}, Value: {imuData.Accel}");
-            //    Console.WriteLine($"Compass: Valid: {imuData.CompassValid}, Value: {imuData.Compass}");
-            //    Console.WriteLine();
-
-            //    var pressureReadResult = pressure.Read();
-            //    Console.WriteLine($"Pressure valid: {pressureReadResult.PressureValid}");
-            //    Console.WriteLine($"Pressure: {pressureReadResult.Pressure}");
-            //    Console.WriteLine($"Temperature valid: {pressureReadResult.TemperatureValid}");
-            //    Console.WriteLine($"Temperature: {pressureReadResult.Temperatur}");
-            //    Console.WriteLine();
-
-            //    var humidityReadResult = humidity.Read();
-            //    Console.WriteLine($"Humidity valid: {humidityReadResult.HumidityValid}");
-            //    Console.WriteLine($"Humidity: {humidityReadResult.Humidity}");
-            //    Console.WriteLine($"Temperature valid: {humidityReadResult.TemperatureValid}");
-            //    Console.WriteLine($"Temperature: {humidityReadResult.Temperatur}");
-
-            //    Console.WriteLine("===================================================");
-
-            //}
+           
             await _bus.Send(new MeterMessage());
             _logger.LogInformation("===================================================");
         }

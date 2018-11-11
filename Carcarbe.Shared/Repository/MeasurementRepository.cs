@@ -18,9 +18,8 @@ namespace Carcarbe.Shared.Repository
         public MeasurementRepository(IConfiguration configuration, ILogger<MeasurementRepository> logger)
         {
             _logger = logger;
-            connectionString = Environment.GetEnvironmentVariable("DB_INFO", EnvironmentVariableTarget.Machine);
-            _logger.LogInformation($"logger connectionString {connectionString}");
-            Console.WriteLine($" console connectionString {connectionString}");
+            connectionString = Environment.GetEnvironmentVariable("DB_INFO");
+            _logger.LogInformation($" connectionString {connectionString}");
         }
 
         internal IDbConnection Connection

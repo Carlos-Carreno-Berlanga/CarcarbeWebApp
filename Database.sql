@@ -3,7 +3,7 @@
 --
 
 CREATE TYPE public.measurementtype AS ENUM
-    ('temperature', 'humidity', 'pressure');
+    ('temperature', 'humidity', 'pressure', 'temperature_humidity', 'temperature_pressure');
 
 ----
 

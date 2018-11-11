@@ -33,17 +33,18 @@ namespace ConsoleDaemonProducer.Services.Implementation
                 {
 
                     RTPressureData pressureReadResult = pressure.Read();
-                    Console.WriteLine($"Pressure valid: {pressureReadResult.PressureValid}");
-                    Console.WriteLine($"Pressure: {pressureReadResult.Pressure}");
-                    Console.WriteLine($"Temperature valid: {pressureReadResult.TemperatureValid}");
-                    Console.WriteLine($"Temperature: {pressureReadResult.Temperatur}");
-                    Console.WriteLine();
+
+                    _logger.LogInformation($"Pressure valid: {pressureReadResult.PressureValid}");
+                    _logger.LogInformation($"Pressure: {pressureReadResult.Pressure}");
+                    _logger.LogInformation($"Temperature valid: {pressureReadResult.TemperatureValid}");
+                    _logger.LogInformation($"Temperature: {pressureReadResult.Temperatur}");
+
 
                     RTHumidityData humidityReadResult = humidity.Read();
-                    Console.WriteLine($"Humidity valid: {humidityReadResult.HumidityValid}");
-                    Console.WriteLine($"Humidity: {humidityReadResult.Humidity}");
-                    Console.WriteLine($"Temperature valid: {humidityReadResult.TemperatureValid}");
-                    Console.WriteLine($"Temperature: {humidityReadResult.Temperatur}");
+                    _logger.LogInformation($"Humidity valid: {humidityReadResult.HumidityValid}");
+                    _logger.LogInformation($"Humidity: {humidityReadResult.Humidity}");
+                    _logger.LogInformation($"Temperature valid: {humidityReadResult.TemperatureValid}");
+                    _logger.LogInformation($"Temperature: {humidityReadResult.Temperatur}");
                     senseHatMeasurement = new SenseHatMeasurement(pressureReadResult, humidityReadResult);
                 }
             }
@@ -69,10 +70,15 @@ namespace ConsoleDaemonProducer.Services.Implementation
                     yield return new Measurement(senseHatMeasurement.pressureValue, MeasurementType.pressure);
                 }
 
-                //if (senseHatMeasurement.humidityTemperatureValueValid)
-                //{
-                //    yield return new Measurement(senseHatMeasurement.humidityTemperatureValue, MeasurementType.humidity);
-                //}
+                if (senseHatMeasurement.humidityTemperatureValueValid)
+                {
+                    yield return new Measurement(senseHatMeasurement.humidityTemperatureValue, MeasurementType.temperature_humidity);
+                }
+
+                if (senseHatMeasurement.pressureTemperatureValueValid)
+                {
+                    yield return new Measurement(senseHatMeasurement.pressureTemperatureValue, MeasurementType.temperature_pressure);
+                }
             }
         }
 
@@ -81,11 +87,11 @@ namespace ConsoleDaemonProducer.Services.Implementation
 
             var measurements = SplitSenseHatMeasurement(senseHatMeasurement);
 
-            foreach(var measurement in measurements)
+            foreach (var measurement in measurements)
             {
-               await _measurementRepository.AddAsync(measurement);
+                await _measurementRepository.AddAsync(measurement);
             }
-         
+
         }
     }
 }

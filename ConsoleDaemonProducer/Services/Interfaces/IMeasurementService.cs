@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ConsoleDaemonProducer.Services.Interfaces
 {
     public interface IMeasurementService
     {
-        void Measure();
+        SenseHatMeasurement Measure();
 
-        void Save(SenseHatMeasurement measurement);
+        Task SaveAsync(SenseHatMeasurement measurement);
     }
 }

@@ -1,4 +1,7 @@
-﻿using Carcarbe.Shared.Messages;
+﻿using Carcarbe.Shared.Domain;
+using Carcarbe.Shared.Domain.Entities;
+using Carcarbe.Shared.Messages;
+using Carcarbe.Shared.Repository;
 using ConsoleDaemonProducer.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,9 +19,10 @@ namespace ConsoleDaemonProducer
         private readonly ILogger _logger;
         private readonly IOptions<DaemonConfig> _config;
         private readonly IBus _bus;
-        private  IEnviromentVariableService _enviromentVariableService;
-        private  IMeasurementService _measurementService;
+        private IEnviromentVariableService _enviromentVariableService;
+        private IMeasurementService _measurementService;
         private readonly IServiceProvider _services;
+        private IMeasurementRepository _measurementRepository;
         public DaemonService(ILogger<DaemonService> logger,
             IOptions<DaemonConfig> config,
             IBus bus,
@@ -34,12 +38,13 @@ namespace ConsoleDaemonProducer
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Starting daemon: " + _config.Value.DaemonName);
-            
+
             using (var scope = _services.CreateScope())
             {
                 _enviromentVariableService = scope.ServiceProvider.GetRequiredService<IEnviromentVariableService>();
                 _measurementService = scope.ServiceProvider.GetRequiredService<IMeasurementService>();
                 _enviromentVariableService.CreateIfNotExists("COMPUTER_ID", Guid.NewGuid().ToString());
+                _measurementRepository = scope.ServiceProvider.GetRequiredService<IMeasurementRepository>();
                 while (true)
                 {
                     _logger.LogInformation($"{DateTime.Now}: Timed Background Service is running:");
@@ -53,7 +58,11 @@ namespace ConsoleDaemonProducer
 
         public async Task DoWorkAsync()
         {
-            _measurementService.Measure();
+            var senseHatmeasurement = _measurementService.Measure();
+
+            await _measurementService.SaveAsync(senseHatmeasurement);
+            //_measurementRepository.Add(new Measurement(22.12f, MeasurementType.temperature));
+
             //using (var settings = RTIMUSettings.CreateDefault())
             //using (var imu = settings.CreateIMU())
             //using (var pressure = settings.CreatePressure())

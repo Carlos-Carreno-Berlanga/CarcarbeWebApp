@@ -1,5 +1,6 @@
 ﻿using Carcarbe.Shared.Logging;
 using Carcarbe.Shared.Messages;
+using Carcarbe.Shared.Repository;
 using ConsoleDaemonProducer.Services.Implementation;
 using ConsoleDaemonProducer.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -45,6 +46,7 @@ namespace ConsoleDaemonProducer
         services.Configure<DaemonConfig>(hostContext.Configuration.GetSection("Daemon"));
         services.AddScoped<IEnviromentVariableService, EnviromentVariableService>();
         services.AddScoped<IMeasurementService, MeasurementService>();
+        services.AddScoped<IMeasurementRepository, MeasurementRepository>();
         services.AddSingleton<IHostedService, DaemonService>();
 
         services.AddRebus(configure => configure

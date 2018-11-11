@@ -6,15 +6,16 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Carcarbe.Shared.Repository
 {
-    class MeasurementRepository : IMeasurementRepository
+    public class MeasurementRepository : IMeasurementRepository
     {
         private string connectionString;
         public MeasurementRepository(IConfiguration configuration)
         {
-            connectionString = configuration.GetValue<string>("DBInfo:ConnectionString");
+            connectionString = Environment.GetEnvironmentVariable("DB_INFO", EnvironmentVariableTarget.Machine);
         }
 
         internal IDbConnection Connection
@@ -30,7 +31,25 @@ namespace Carcarbe.Shared.Repository
             using (IDbConnection dbConnection = Connection)
             {
                 dbConnection.Open();
-                dbConnection.Execute("INSERT INTO customer (value, measurement_type,time_stamp_timezone ) VALUES(@Value,@MeasurementType::measurement_type,@TimeStamp)",
+                
+                dbConnection.Execute("INSERT INTO measurement (value, measurement_type, time_stamp_timezone ) VALUES(@Value,@MeasurementType::measurementtype,@TimeStamp)",
+                    new
+                    {
+                        item.Value,
+                        MeasurementType = item.MeasurementType.ToString(),
+                        TimeStamp = DateTime.Now
+                    });
+            }
+
+        }
+
+        public async Task AddAsync(Measurement item)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                dbConnection.Open();
+
+                await dbConnection.ExecuteAsync("INSERT INTO measurement (value, measurement_type, time_stamp_timezone ) VALUES(@Value,@MeasurementType::measurementtype,@TimeStamp)",
                     new
                     {
                         item.Value,

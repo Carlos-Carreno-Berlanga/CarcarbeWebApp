@@ -7,6 +7,7 @@ using Sense.RTIMU;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ConsoleDaemonProducer.Services.Implementation
 {
@@ -21,8 +22,9 @@ namespace ConsoleDaemonProducer.Services.Implementation
             _logger = logger;
             _measurementRepository = measurementRepository;
         }
-        public void Measure()
+        public SenseHatMeasurement Measure()
         {
+            SenseHatMeasurement senseHatMeasurement = null;
             try
             {
                 using (var settings = RTIMUSettings.CreateDefault())
@@ -42,43 +44,46 @@ namespace ConsoleDaemonProducer.Services.Implementation
                     Console.WriteLine($"Humidity: {humidityReadResult.Humidity}");
                     Console.WriteLine($"Temperature valid: {humidityReadResult.TemperatureValid}");
                     Console.WriteLine($"Temperature: {humidityReadResult.Temperatur}");
-                    SenseHatMeasurement senseHatMeasurement = new SenseHatMeasurement(pressureReadResult, humidityReadResult);
+                    senseHatMeasurement = new SenseHatMeasurement(pressureReadResult, humidityReadResult);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
             }
+
+            return senseHatMeasurement;
         }
 
         public IEnumerable<Measurement> SplitSenseHatMeasurement(SenseHatMeasurement senseHatMeasurement)
         {
-
-            if (senseHatMeasurement.humidityValueValid)
+            if (senseHatMeasurement != null)
             {
-                yield return new Measurement(senseHatMeasurement.humidityValue, MeasurementType.humidity);
+                if (senseHatMeasurement.humidityValueValid)
+                {
+                    yield return new Measurement(senseHatMeasurement.humidityValue, MeasurementType.humidity);
+                }
+
+                if (senseHatMeasurement.pressureValueValid)
+                {
+                    yield return new Measurement(senseHatMeasurement.pressureValue, MeasurementType.pressure);
+                }
+
+                //if (senseHatMeasurement.humidityTemperatureValueValid)
+                //{
+                //    yield return new Measurement(senseHatMeasurement.humidityTemperatureValue, MeasurementType.humidity);
+                //}
             }
-
-            if (senseHatMeasurement.pressureValueValid)
-            {
-                yield return new Measurement(senseHatMeasurement.pressureValue, MeasurementType.pressure);
-            }
-
-            //if (senseHatMeasurement.humidityTemperatureValueValid)
-            //{
-            //    yield return new Measurement(senseHatMeasurement.humidityTemperatureValue, MeasurementType.humidity);
-            //}
-
         }
 
-        public void Save(SenseHatMeasurement senseHatMeasurement)
+        public async Task SaveAsync(SenseHatMeasurement senseHatMeasurement)
         {
 
             var measurements = SplitSenseHatMeasurement(senseHatMeasurement);
 
             foreach(var measurement in measurements)
             {
-                _measurementRepository.Add(measurement);
+               await _measurementRepository.AddAsync(measurement);
             }
          
         }

@@ -1,8 +1,9 @@
+using Carcarbe.Shared.Domain;
 using Carcarbe.Shared.Logging;
 using Carcarbe.Shared.Messages;
+using Carcarbe.Shared.Repository;
 using CarcarbeWebApp.Handlers;
 using CarcarbeWebApp.HostedService;
-using CarcarbeWebApp.Messages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -60,6 +61,7 @@ namespace CarcarbeWebApp
                 configuration.RootPath = "ClientApp/build";
             });
             services.AddHostedService<TimedHostedService>();
+            services.AddScoped<IMeasurementRepository, MeasurementRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

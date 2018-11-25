@@ -1,4 +1,5 @@
-﻿using Carcarbe.Shared.Domain.Entities;
+﻿using Carcarbe.Shared.Domain;
+using Carcarbe.Shared.Domain.Entities;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -77,6 +78,26 @@ namespace Carcarbe.Shared.Repository
             {
                 dbConnection.Open();
                 return dbConnection.Query<Measurement>("SELECT * FROM customer");
+            }
+        }
+
+        public IEnumerable<Measurement> FindAllByType(MeasurementType type)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                dbConnection.Open();
+                
+                return dbConnection.Query<Measurement>($"SELECT * FROM measurement WHERE measurement_type='{type}'");
+            }
+        }
+
+        public async  Task<IEnumerable<Measurement>> FindAllByTypeAsync(MeasurementType type)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                dbConnection.Open();
+
+                return await dbConnection.QueryAsync<Measurement>($"SELECT * FROM measurement WHERE measurement_type='{type}'");
             }
         }
 

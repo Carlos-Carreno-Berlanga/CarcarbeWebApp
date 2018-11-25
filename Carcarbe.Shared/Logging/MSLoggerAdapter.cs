@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Rebus.Logging;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Carcarbe.Shared.Logging
 {

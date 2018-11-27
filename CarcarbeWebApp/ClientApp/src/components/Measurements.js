@@ -2,16 +2,15 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { actionCreators } from '../store/WeatherForecasts';
+import { actionCreators } from '../store/Measurements';
 
 class Measurements extends Component {
-  componentWillMount() {
- 
-  }
 
-  componentWillReceiveProps(nextProps) {
- 
-  }
+    componentWillMount() {
+                
+        this.props.requestMeasurements('pressure');
+    }
+
 
   render() {
     return (
@@ -24,6 +23,6 @@ class Measurements extends Component {
 }
 
 export default connect(
-  state => state.weatherForecasts,
+    state => state.measurementsPage,
   dispatch => bindActionCreators(actionCreators, dispatch)
 )(Measurements);

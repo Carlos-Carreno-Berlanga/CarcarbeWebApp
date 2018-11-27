@@ -1,9 +1,10 @@
 
-
+import { cloneDeep } from 'lodash';
 const requestMeasurementsType = 'REQUEST_MEASUREMENTS';
 const receiveMeasurementsType = 'RECEIVE_MEASUREMENTS';
 
-const initialState = { measurements: [], measurement_type: null};
+const initialState = {
+    measurements: {}, measurement_type: null };
 
 export const actionCreators = {
 
@@ -35,13 +36,16 @@ export const reducer = (state, action) => {
     }
 
     if (action.type === receiveMeasurementsType) {
+        let measurementsClone = cloneDeep(state.measurements);
+        console.log("state.measurements", state.measurements);
+        measurementsClone[action.measurement_type] = action.measurements;
         return {
             ...state,
             measurement_type: action.measurement_type,
-            measurements: action.measurements,
+            measurements: measurementsClone,
             isLoading: false
         };
     }
-   
+
     return state;
 };

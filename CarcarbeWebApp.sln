@@ -7,10 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarcarbeWebApp", "CarcarbeW
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{E01EB4E0-4B34-4907-A6EA-892F6A2A73B2}"
 	ProjectSection(SolutionItems) = preProject
+		Database.sql = Database.sql
 		DeployToHeroku.txt = DeployToHeroku.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleDaemonProducer", "ConsoleDaemonProducer\ConsoleDaemonProducer.csproj", "{6F591E3B-9626-4F33-B863-A41E0A401939}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleDaemonProducer", "ConsoleDaemonProducer\ConsoleDaemonProducer.csproj", "{6F591E3B-9626-4F33-B863-A41E0A401939}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carcarbe.Shared", "Carcarbe.Shared\Carcarbe.Shared.csproj", "{1EAEC4D4-3B70-4E8E-9FBC-27ED17D5E557}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +29,10 @@ Global
 		{6F591E3B-9626-4F33-B863-A41E0A401939}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F591E3B-9626-4F33-B863-A41E0A401939}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F591E3B-9626-4F33-B863-A41E0A401939}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EAEC4D4-3B70-4E8E-9FBC-27ED17D5E557}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EAEC4D4-3B70-4E8E-9FBC-27ED17D5E557}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EAEC4D4-3B70-4E8E-9FBC-27ED17D5E557}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EAEC4D4-3B70-4E8E-9FBC-27ED17D5E557}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

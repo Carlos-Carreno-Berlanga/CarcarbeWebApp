@@ -1,6 +1,9 @@
+using Carcarbe.Shared.Domain;
+using Carcarbe.Shared.Logging;
+using Carcarbe.Shared.Messages;
+using Carcarbe.Shared.Repository;
 using CarcarbeWebApp.Handlers;
-using CarcarbeWebApp.Logging;
-using CarcarbeWebApp.Messages;
+using CarcarbeWebApp.HostedService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -8,15 +11,9 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Rebus.Activation;
 using Rebus.Config;
 using Rebus.Routing.TypeBased;
 using Rebus.ServiceProvider;
-using Rebus.RabbitMq;
-using System;
-using System.Threading.Tasks;
-using Rebus.Transport.InMem;
-using CarcarbeWebApp.HostedService;
 
 namespace CarcarbeWebApp
 {
@@ -48,7 +45,7 @@ namespace CarcarbeWebApp
             services.AddRebus(configure => configure
         .Logging(l => l.Use(new MSLoggerFactoryAdapter(_loggerFactory)))
         .Transport(t => t.UseRabbitMq("amqp://pklfurgc:4YJosxjltR4AntkkvVignFH-TKW16c9k@raven.rmq.cloudamqp.com/pklfurgc", "messages-queue"))
-        .Routing(r => r.TypeBased().MapAssemblyOf<Message1>("messages-queue")));
+        .Routing(r => r.TypeBased().MapAssemblyOf<MeterMessage>("messages-queue")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddDistributedRedisCache(option =>
@@ -64,6 +61,7 @@ namespace CarcarbeWebApp
                 configuration.RootPath = "ClientApp/build";
             });
             services.AddHostedService<TimedHostedService>();
+            services.AddScoped<IMeasurementRepository, MeasurementRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,20 +76,7 @@ namespace CarcarbeWebApp
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
-
-            // or optionally act on the bus:
-            // .UseRebus(async bus => await bus.Subscribe<Message1>())
-            //.Run(async (context) =>
-            //{
-            //    var bus = app.ApplicationServices.GetRequiredService<IBus>();
-
-            //    await Task.WhenAll(
-            //        Enumerable.Range(0, 10)
-            //            .Select(i => new Message1())
-            //            .Select(message => bus.Send(message)));
-
-            //    await context.Response.WriteAsync("Rebus sent another 10 messages!");
-            //});
+            
             app.UseRebus();
             app.UseHttpsRedirection();
             app.UseStaticFiles();

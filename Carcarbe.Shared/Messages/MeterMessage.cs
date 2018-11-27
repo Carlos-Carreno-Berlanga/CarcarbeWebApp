@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace CarcarbeWebApp.Messages
+namespace Carcarbe.Shared.Messages
 {
-    public class Message1
+    public class MeterMessage
     {
-        public Message1()
+        public MeterMessage()
         {
             Id = Guid.NewGuid();
         }

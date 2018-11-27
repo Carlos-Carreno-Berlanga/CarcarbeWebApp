@@ -1,11 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using Rebus.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace CarcarbeWebApp.Logging
+namespace Carcarbe.Shared.Logging
 {
     public class MSLoggerAdapter : ILog
     {

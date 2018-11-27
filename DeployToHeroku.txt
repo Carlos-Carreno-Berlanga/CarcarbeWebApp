@@ -1,3 +1,6 @@
+build image
+docker build -f "D:\Repos\Carlos-Carreno-Berlanga\CarcarbeWebApp\CarcarbeWebApp\Dockerfile" -t carcarbewebapp  --label "com.microsoft.created-by=visual-studio" "D:\Repos\Carlos-Carreno-Berlanga\CarcarbeWebApp"
+
 heroku login
 heroku container:login
 docker tag imageId registry.heroku.com/carcarbe-web-app/web

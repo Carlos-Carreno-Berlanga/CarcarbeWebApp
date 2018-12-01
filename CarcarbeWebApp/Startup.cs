@@ -4,6 +4,7 @@ using Carcarbe.Shared.Messages;
 using Carcarbe.Shared.Repository;
 using CarcarbeWebApp.Handlers;
 using CarcarbeWebApp.HostedService;
+using CarcarbeWebApp.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -34,8 +35,10 @@ namespace CarcarbeWebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddResponseCompression();
+            services.AddSignalR(); // <-- SignalR
             // Register handlers 
-            services.AutoRegisterHandlersFromAssemblyOf<Handler1>();
+            services.AutoRegisterHandlersFromAssemblyOf<MeasurementMessageHandler>();
            
             // Configure and register Rebus
             //services.AddRebus(configure => configure
@@ -76,7 +79,11 @@ namespace CarcarbeWebApp
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
-            
+
+            app.UseSignalR(routes =>  // <-- SignalR
+            {
+                routes.MapHub<Notifier>("/Notifier");
+            });
             app.UseRebus();
             app.UseHttpsRedirection();
             app.UseStaticFiles();

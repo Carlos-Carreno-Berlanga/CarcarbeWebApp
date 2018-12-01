@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Rebus.Bus;
 using System;
 using System.Threading;
@@ -59,8 +60,8 @@ namespace ConsoleDaemonProducer
             var senseHatmeasurement = _measurementService.Measure();
 
             await _measurementService.SaveAsync(senseHatmeasurement);
-           
-            await _bus.Send(new MeterMessage());
+            //SenseHatMeasurement test = new SenseHatMeasurement(new Sense.RTIMU.RTPressureData { });
+            await _bus.Send(new MeterMessage(JsonConvert.SerializeObject(senseHatmeasurement)));
             _logger.LogInformation("===================================================");
         }
 

@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { HubConnectionBuilder } from '@aspnet/signalr';
+
 import { actionCreators } from '../store/Measurements';
 import Plot from 'react-plotly.js';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
+let hubConnection = null;
 class Measurements extends Component {
 
     constructor() {
@@ -14,6 +17,7 @@ class Measurements extends Component {
 
             tabIndex: 0
         };
+        this.handleNotification = this.handleNotification.bind(this);
     }
 
     componentWillMount() {
@@ -22,6 +26,26 @@ class Measurements extends Component {
         this.props.requestMeasurements('humidity');
         this.props.requestMeasurements('temperature_humidity');
         this.props.requestMeasurements('temperature_pressure');
+        this.handleNotification();
+    }
+
+    handleNotification() {
+        if (hubConnection) {
+            console.log("unsuscribe");
+            hubConnection.off("Notify");
+            hubConnection = null;
+        }
+
+        hubConnection = new HubConnectionBuilder()
+            .withUrl('/Notifier')
+            .build();
+
+        hubConnection.on("Notify", (data) => {
+          
+            console.log("data", data);
+
+        });
+        hubConnection.start();
     }
 
 
@@ -206,7 +230,7 @@ class Measurements extends Component {
                             ]}
                             useResizeHandler
                             style={{ width: "100%", height: "100%" }}
-                            layout={{                              
+                            layout={{
                                 autosize: true,
                                 title: 'Temperature Sensor 2',
                                 xaxis: {

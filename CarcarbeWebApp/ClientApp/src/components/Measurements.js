@@ -78,9 +78,10 @@ class Measurements extends Component {
                                     marker: { color: 'blue' }
                                 }
                             ]}
+                            useResizeHandler
+                            style={{ width: "100%", height: "100%" }}
                             layout={{
-                                width: 1120, height: 740,
-
+                                autosize: true,
                                 title: 'Pressure',
                                 xaxis: {
                                     autorange: true,
@@ -119,9 +120,10 @@ class Measurements extends Component {
                                     marker: { color: 'red' }
                                 }
                             ]}
+                            useResizeHandler
+                            style={{ width: "100%", height: "100%" }}
                             layout={{
-                                width: 1120, height: 740,
-
+                                autosize: true,
                                 title: 'Humidity',
                                 xaxis: {
                                     autorange: true,
@@ -160,9 +162,10 @@ class Measurements extends Component {
                                     marker: { color: 'yellow' }
                                 }
                             ]}
+                            useResizeHandler
+                            style={{ width: "100%", height: "100%" }}
                             layout={{
-                                width: 1120, height: 740,
-
+                                autosize: true,
                                 title: 'Temperature Sensor 1',
                                 xaxis: {
                                     autorange: true,
@@ -201,9 +204,10 @@ class Measurements extends Component {
                                     marker: { color: 'green' }
                                 }
                             ]}
-                            layout={{
-                                width: 1120, height: 740,
-
+                            useResizeHandler
+                            style={{ width: "100%", height: "100%" }}
+                            layout={{                              
+                                autosize: true,
                                 title: 'Temperature Sensor 2',
                                 xaxis: {
                                     autorange: true,

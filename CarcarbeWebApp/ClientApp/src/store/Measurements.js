@@ -2,6 +2,7 @@
 import { cloneDeep } from 'lodash';
 const requestMeasurementsType = 'REQUEST_MEASUREMENTS';
 const receiveMeasurementsType = 'RECEIVE_MEASUREMENTS';
+const receiveMeasurementsUpdateType = 'RECEIVE_MEASUREMENTS_UPDATE';
 
 const initialState = {
     measurements: {}, measurement_type: null };
@@ -21,6 +22,10 @@ export const actionCreators = {
         const measurements = await response.json();
 
         dispatch({ type: receiveMeasurementsType, measurement_type, measurements });
+    },
+
+    receiveMeasurementsUpdate: measurementsUpdateData => async(dispatch) => {
+        dispatch({ type: receiveMeasurementsUpdateType, measurementsUpdateData});
     }
 };
 
@@ -37,7 +42,6 @@ export const reducer = (state, action) => {
 
     if (action.type === receiveMeasurementsType) {
         let measurementsClone = cloneDeep(state.measurements);
-        console.log("state.measurements", state.measurements);
         measurementsClone[action.measurement_type] = action.measurements;
         return {
             ...state,
@@ -45,6 +49,10 @@ export const reducer = (state, action) => {
             measurements: measurementsClone,
             isLoading: false
         };
+    }
+
+    if (action.type === receiveMeasurementsUpdateType) {
+        console.log("receiveMeasurementsUpdateType measurementsUpdateData", action.measurementsUpdateData);
     }
 
     return state;

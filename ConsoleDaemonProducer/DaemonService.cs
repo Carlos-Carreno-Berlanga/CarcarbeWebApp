@@ -60,8 +60,8 @@ namespace ConsoleDaemonProducer
             var senseHatmeasurement = _measurementService.Measure();
 
             await _measurementService.SaveAsync(senseHatmeasurement);
-            //SenseHatMeasurement test = new SenseHatMeasurement(new Sense.RTIMU.RTPressureData { });
-            await _bus.Send(new MeterMessage(JsonConvert.SerializeObject(senseHatmeasurement)));
+            var measurements = _measurementService.SplitSenseHatMeasurement(senseHatmeasurement);
+            await _bus.Send(new MeterMessage(JsonConvert.SerializeObject(measurements)));
             _logger.LogInformation("===================================================");
         }
 

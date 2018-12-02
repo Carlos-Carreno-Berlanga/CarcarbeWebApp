@@ -1,4 +1,5 @@
 ﻿using Carcarbe.Shared.Domain;
+using Carcarbe.Shared.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,5 +12,7 @@ namespace ConsoleDaemonProducer.Services.Interfaces
         SenseHatMeasurement Measure();
 
         Task SaveAsync(SenseHatMeasurement measurement);
+
+        IEnumerable<Measurement> SplitSenseHatMeasurement(SenseHatMeasurement senseHatMeasurement);
     }
 }

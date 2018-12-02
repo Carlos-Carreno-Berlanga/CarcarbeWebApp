@@ -41,8 +41,8 @@ class Measurements extends Component {
             .build();
 
         hubConnection.on("Notify", (data) => {
-          
-            console.log("data", data);
+            this.props.receiveMeasurementsUpdate(data);
+            //console.log("data", data);
 
         });
         hubConnection.start();

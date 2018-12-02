@@ -1,14 +1,15 @@
-﻿using Carcarbe.Shared.Messages;
+﻿using Carcarbe.Shared.Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CarcarbeWebApp.Hubs
 {
     public class Notifier : Hub
     {
-        public Task Notify(MeterMessage message)
+        public Task Notify(IEnumerable<Measurement> measurements)
         {
-            return Clients.All.SendAsync("Notify", message);
+            return Clients.All.SendAsync("Notify", measurements);
         }
     }
 }

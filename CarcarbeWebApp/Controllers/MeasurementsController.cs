@@ -25,7 +25,5 @@ namespace CarcarbeWebApp.Controllers
             var measurements = await _measurementRepository.FindAllByTypeAsync(measurementTypeEnum);
             return Ok(measurements);
         }
-
-
     }
 }

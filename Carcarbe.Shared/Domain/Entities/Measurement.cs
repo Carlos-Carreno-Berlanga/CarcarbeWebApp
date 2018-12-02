@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Carcarbe.Shared.Domain.Entities
 {
     public class Measurement : BaseEntity
     {
- 
+
+        [JsonConstructor]
         public Measurement(float value, MeasurementType measurementType)
         {
             Value = value;

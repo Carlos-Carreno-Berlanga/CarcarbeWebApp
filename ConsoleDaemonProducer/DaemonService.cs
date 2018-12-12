@@ -47,8 +47,14 @@ namespace ConsoleDaemonProducer
                 while (true)
                 {
                     _logger.LogInformation($"{DateTime.Now}: Timed Background Service is running:");
-
-                    await DoWorkAsync();
+                    try
+                    {
+                        await DoWorkAsync();
+                    }
+                    catch(Exception ex)
+                    {
+                        _logger.LogCritical(ex.Message);
+                    }
                     await Task.Delay(_config.Value.TickInterval);
                 }
             }
@@ -58,7 +64,6 @@ namespace ConsoleDaemonProducer
         public async Task DoWorkAsync()
         {
             var senseHatmeasurement = _measurementService.Measure();
-
             await _measurementService.SaveAsync(senseHatmeasurement);
             var measurements = _measurementService.SplitSenseHatMeasurement(senseHatmeasurement);
             await _bus.Send(new MeterMessage(JsonConvert.SerializeObject(measurements)));

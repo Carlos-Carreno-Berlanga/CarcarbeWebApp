@@ -1,8 +1,8 @@
-FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
+FROM microsoft/dotnet:2.2.2-aspnetcore-runtime AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM microsoft/dotnet:2.1-sdk AS build
+FROM microsoft/dotnet:2.2.104-sdk AS build
 WORKDIR /src
 RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash -
 RUN apt-get install -y nodejs

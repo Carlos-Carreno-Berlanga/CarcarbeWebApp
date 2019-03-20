@@ -7,6 +7,7 @@ using CarcarbeWebApp.HostedService;
 using CarcarbeWebApp.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using Rebus.Config;
 using Rebus.Routing.TypeBased;
 using Rebus.ServiceProvider;
+using System;
 
 namespace CarcarbeWebApp
 {
@@ -50,7 +52,12 @@ namespace CarcarbeWebApp
         .Transport(t => t.UseRabbitMq("amqp://pklfurgc:4YJosxjltR4AntkkvVignFH-TKW16c9k@raven.rmq.cloudamqp.com/pklfurgc", "messages-queue"))
         .Routing(r => r.TypeBased().MapAssemblyOf<MeterMessage>("messages-queue")));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                options.HttpsPort = Convert.ToInt32(Environment.GetEnvironmentVariable("ASPNETCORE_HTTPS_PORT"));
+            });
             services.AddDistributedRedisCache(option =>
             {
                 option.Configuration = "redis-19221.c92.us-east-1-3.ec2.cloud.redislabs.com:19221,password=6MFI4IqLgNP9TyCcv6BjFKNQMXoHtIZc";

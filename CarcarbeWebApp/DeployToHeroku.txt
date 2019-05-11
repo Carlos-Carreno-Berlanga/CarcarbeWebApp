@@ -6,3 +6,9 @@ heroku container:login
 docker tag imageId registry.heroku.com/carcarbe-web-app/web
 docker push  registry.heroku.com/carcarbe-web-app/web
 heroku container:release web --app=carcarbe-web-app
+
+*************
+DEPLOY TO KUBERNETES
+helm install --name carcarbewebapp .\carcarbewebapp\
+Set kubernetes dashboard
+http://collabnix.com/kubernetes-dashboard-on-docker-desktop-for-windows-2-0-0-3-in-2-minutes/

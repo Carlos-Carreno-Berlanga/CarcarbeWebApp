@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.5.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Kubernetes.Tools.Targets" Version="1.0.0" />
     <PackageReference Include="Rebus" Version="5.3.0" />
     <PackageReference Include="Rebus.RabbitMQ" Version="5.1.2" />
     <PackageReference Include="Rebus.ServiceProvider" Version="4.0.2" />

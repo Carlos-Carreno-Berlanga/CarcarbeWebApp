@@ -48,8 +48,13 @@ namespace ConsoleDaemonProducer
 
         services.AddRebus(configure => configure
     .Logging(l => l.Use(new MSLoggerFactoryAdapter(loggerFactory)))
-    .Transport(t => t.UseRabbitMq("amqp://pklfurgc:4YJosxjltR4AntkkvVignFH-TKW16c9k@raven.rmq.cloudamqp.com/pklfurgc", "messages-queue"))
-    .Routing(r => r.TypeBased().MapAssemblyOf<MeterMessage>("messages-queue")));
+    .Transport(t => t.UseRabbitMqAsOneWayClient("amqp://pklfurgc:4YJosxjltR4AntkkvVignFH-TKW16c9k@raven.rmq.cloudamqp.com/pklfurgc")
+    .InputQueueOptions((cfg => { cfg.SetDurable(true); cfg.SetAutoDelete(false, 600000);  }))
+    
+    )
+    .Routing(r => r.TypeBased().Map<MeterMessage>("messages-queue"))
+    );
+
     })
     .ConfigureLogging((hostingContext, logging) =>
     {

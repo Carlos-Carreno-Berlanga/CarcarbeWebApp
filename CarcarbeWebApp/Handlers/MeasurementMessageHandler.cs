@@ -23,17 +23,20 @@ namespace CarcarbeWebApp.Handlers
             _hubContext = hubContext;
         }
 
-        public Task Handle(MeterMessage message)
+        public async Task Handle(MeterMessage message)
         {
             _logger.LogInformation("MeasurementMessageHandler received : {message}", message);
-            var measurements = JsonConvert.DeserializeObject<IEnumerable<Measurement>>(message.Data, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor });
-            foreach(var measurement in measurements)
+            if (message.Data != string.Empty)
             {
-                measurement.TimeStamp = DateTime.UtcNow;
+                var measurements = JsonConvert.DeserializeObject<IEnumerable<Measurement>>(message.Data, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor });
+                foreach (var measurement in measurements)
+                {
+                    measurement.TimeStamp = DateTime.UtcNow;
+                }
+
+                await _hubContext.Clients.All.SendAsync("Notify", measurements);
             }
 
-            _hubContext.Clients.All.SendAsync("Notify", measurements);
-            return Task.CompletedTask;
         }
     }
 }
